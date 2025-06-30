@@ -1,8 +1,4 @@
-
-class Calculator:
-    def __init__(self):
-        pass
-
+class BasicCalculator:
     def add(self, a, b):
         return a + b
 
@@ -27,7 +23,7 @@ class Calculator:
 
     def factorial(self, n):
         if n < 0:
-            return "Error: Factorial of negative number!"
+            return "Error: Negative factorial!"
         result = 1
         for i in range(2, n + 1):
             result *= i
@@ -35,11 +31,8 @@ class Calculator:
 
     def sqrt(self, x):
         if x < 0:
-            return "Error: Square root of negative number!"
-        if x == 0 or x == 1:
-            return x
-        start = 0
-        end = x
+            return "Error: Negative square root!"
+        start, end = 0, x
         ans = 0
         for _ in range(100):
             mid = (start + end) / 2
@@ -53,65 +46,124 @@ class Calculator:
         return round(ans, 6)
 
     def gcd(self, a, b):
-        while b != 0:
+        while b:
             a, b = b, a % b
         return abs(a)
 
     def lcm(self, a, b):
-        if a == 0 or b == 0:
-            return 0
-        return abs(a * b) // self.gcd(a, b)
+        return abs(a * b) // self.gcd(a, b) if a and b else 0
 
 
-def main():
-    calc = Calculator()
+class ScientificCalculator:
+    def ln(self, x):
+        if x <= 0:
+            return "Error: ln domain is (0, ∞)"
+        result = 0
+        n = 100
+        x -= 1
+        for i in range(1, n):
+            term = ((-1) ** (i + 1)) * (x ** i) / i
+            result += term
+        return round(result, 6)
 
-    while True:
-        print("\n----- Calculator Menu -----")
-        print("1. Addition")
-        print("2. Subtraction")
-        print("3. Multiplication")
-        print("4. Division")
-        print("5. Power")
-        print("6. Factorial")
-        print("7. Square Root")
-        print("8. GCD")
-        print("9. LCM")
-        print("0. Exit")
+    def log10(self, x):
+        LN_10 = 2.302585
+        ln_result = self.ln(x)
+        if isinstance(ln_result, str):
+            return ln_result
+        return round(ln_result / LN_10, 6)
 
-        choice = input("Enter your choice (0-9): ")
+    def degrees_to_radians(self, deg):
+        return deg * (3.14159265 / 180)
 
-        if choice == '0':
-            print("Exiting Calculator. Goodbye!")
-            break
+    def sin(self, deg):
+        x = self.degrees_to_radians(deg)
+        result = 0
+        for i in range(10):
+            sign = (-1) ** i
+            result += sign * (x ** (2 * i + 1)) / self.factorial(2 * i + 1)
+        return round(result, 6)
 
-        elif choice in ['1', '2', '3', '4', '5', '8', '9']:
-            a = int(input("Enter first number: "))
-            b = int(input("Enter second number: "))
+    def cos(self, deg):
+        x = self.degrees_to_radians(deg)
+        result = 0
+        for i in range(10):
+            sign = (-1) ** i
+            result += sign * (x ** (2 * i)) / self.factorial(2 * i)
+        return round(result, 6)
 
-        if choice == '1':
-            print("Result:", calc.add(a, b))
-        elif choice == '2':
-            print("Result:", calc.subtract(a, b))
-        elif choice == '3':
-            print("Result:", calc.multiply(a, b))
-        elif choice == '4':
-            print("Result:", calc.divide(a, b))
-        elif choice == '5':
-            print("Result:", calc.power(a, b))
-        elif choice == '6':
-            n = int(input("Enter a number: "))
-            print("Result:", calc.factorial(n))
-        elif choice == '7':
-            x = float(input("Enter a number: "))
-            print("Result:", calc.sqrt(x))
-        elif choice == '8':
-            print("Result:", calc.gcd(a, b))
-        elif choice == '9':
-            print("Result:", calc.lcm(a, b))
-        else:
-            print("Invalid choice. Please try again.")
+    def tan(self, deg):
+        cos_val = self.cos(deg)
+        if abs(cos_val) < 1e-6:
+            return "Error: tan undefined"
+        return round(self.sin(deg) / cos_val, 6)
+
+    def factorial(self, n):
+        result = 1
+        for i in range(2, n + 1):
+            result *= i
+        return result
+
+
+class Calculator(BasicCalculator, ScientificCalculator):
+    def menu(self):
+        while True:
+            print("\n====== Calculator Menu ======")
+            print("1. Add\n2. Subtract\n3. Multiply\n4. Divide")
+            print("5. Power\n6. Factorial\n7. Square Root")
+            print("8. GCD\n9. LCM\n10. ln\n11. log10")
+            print("12. sin\n13. cos\n14. tan\n0. Exit")
+
+            choice = input("Enter choice (0-14): ")
+
+            if choice == '0':
+                print("Exiting calculator.")
+                break
+
+            if choice in ['1', '2', '3', '4', '5', '8', '9']:
+                a = int(input("Enter first number: "))
+                b = int(input("Enter second number: "))
+
+            if choice == '1':
+                print("Result:", self.add(a, b))
+            elif choice == '2':
+                print("Result:", self.subtract(a, b))
+            elif choice == '3':
+                print("Result:", self.multiply(a, b))
+            elif choice == '4':
+                print("Result:", self.divide(a, b))
+            elif choice == '5':
+                print("Result:", self.power(a, b))
+            elif choice == '6':
+                n = int(input("Enter number: "))
+                print("Result:", self.factorial(n))
+            elif choice == '7':
+                x = float(input("Enter number: "))
+                print("Result:", self.sqrt(x))
+            elif choice == '8':
+                print("Result:", self.gcd(a, b))
+            elif choice == '9':
+                print("Result:", self.lcm(a, b))
+            elif choice == '10':
+                x = float(input("Enter number: "))
+                print("Result:", self.ln(x))
+            elif choice == '11':
+                x = float(input("Enter number: "))
+                print("Result:", self.log10(x))
+            elif choice == '12':
+                deg = float(input("Enter angle in degrees: "))
+                print("Result:", self.sin(deg))
+            elif choice == '13':
+                deg = float(input("Enter angle in degrees: "))
+                print("Result:", self.cos(deg))
+            elif choice == '14':
+                deg = float(input("Enter angle in degrees: "))
+                print("Result:", self.tan(deg))
+            else:
+                print("Invalid choice.")
 
 
 if __name__ == "__main__":
-    main()
+    calc = Calculator()
+    calc.menu()
+
