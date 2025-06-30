@@ -41,7 +41,7 @@ All functions are computed **without using the `math` module** — approximation
 
 ---
 
-## Taylor/Mclaurin Series - 
+## Taylor/Mclaurin Series 
 $$
 \ln(1 + x) = x - \frac{x^2}{2} + \frac{x^3}{3} - \frac{x^4}{4} + \dots
 \quad \text{for } -1 < x \leq 1
