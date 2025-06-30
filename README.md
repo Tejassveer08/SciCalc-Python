@@ -41,6 +41,39 @@ All functions are computed **without using the `math` module** — approximation
 
 ---
 
+## Taylor/Mclaurin Series - 
+$$
+\ln(1 + x) = x - \frac{x^2}{2} + \frac{x^3}{3} - \frac{x^4}{4} + \dots
+\quad \text{for } -1 < x \leq 1
+$$
+ 
+
+## Change of Base Formula
+$$
+\log_{10}(x) = \frac{\ln(x)}{\ln(10)}
+$$
+
+
+## Taylor Series of Sin Function
+$$
+\sin(x) = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + \dots
+$$
+
+
+## Taylor Series of Cos Function
+$$
+\cos(x) = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \frac{x^6}{6!} + \dots
+$$
+
+
+## Tangent Function
+$$
+\tan(x) = \frac{\sin(x)}{\cos(x)}
+$$
+
+
+
+
 ## 📊 Logarithmic Functions
 
 ### 🔹 `ln(x)`: Natural Logarithm
